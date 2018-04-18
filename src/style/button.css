@@ -1,0 +1,39 @@
+/* GENERAL STYLING FOR BUTTON */
+.btn {
+    width: 8.5rem;
+    height: 2rem;
+    font-size: .7rem;
+    border-radius: 0;
+    background-color: #4f4a5b;
+    /* color: #3c3649; */
+    color: white;
+    font-weight: bold;
+    border-left: 1pt solid white;
+    border-right: 1pt solid white;
+}
+
+/* CLICKED BUTTONS GET NEW STYLING */
+.btn.active-button {
+    background-color: #c4c2c8;
+    color: #3c3649;
+}
+
+/* LEFTMOST BUTTON BORDERS */
+.btn:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 5%;
+    border-bottom-left-radius: 5%;
+    border-right: 1pt solid white;
+    border-left: none;
+}
+
+/* RIGHTMOST BUTTON BORDERS */
+.btn:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 5%;
+    border-bottom-right-radius: 5%;
+    border-left: 1pt solid white;
+    border-right: none;
+}
