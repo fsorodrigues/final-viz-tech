@@ -3,6 +3,12 @@ body {
   box-sizing: border-box;
 }
 
+html,body,div,h1,h2,h3,h4,p,ul,li{
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+
 .hero-container {
     align-content: center;
 }
@@ -32,9 +38,12 @@ svg.hero-svg {
 /*** CHART CONTAINERS ***/
 /** parent divs for SVG elements **/
 .bar-container,
-.matrix-container,
 .line-container {
     min-height: 450px;
+}
+
+.matrix-container {
+    min-height: 550px;
 }
 
 /*** SECTIONS ***/
@@ -50,11 +59,21 @@ section {
 
 /* Section 2 */
 #bar-chart-container {
+    background-color: grey;
 }
 
 /* Section 3 */
 #matrix-chart-container {
-    background-color: grey;
+}
+
+/*** TOOLTIPS ***/
+.tooltip-bars,
+.tooltip-matrix {
+    position: absolute;
+    min-width: 200px;
+    background-color: gainsboro;
+    opacity: 0;
+    padding: 1rem;
 }
 
 /*** SCROLL MAGIC ELEMENTS ***/

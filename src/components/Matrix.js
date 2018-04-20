@@ -6,10 +6,24 @@ import {formatNumber} from '../utils';
 import Button from './Button';
 
 // importing stylesheets
-import '../style/timeseries.css';
+import '../style/matrix.css';
 
 // setting up modules
-const button = Button();
+const button = Button()
+    .buttonClass('btn-rects');
+
+// setting up scales
+const scaleX = d3.scaleLinear();
+const scaleY = d3.scaleBand();
+const margin = {t:20, r:20, b:20, l:50};
+
+const scaleColor = d3.scaleOrdinal()
+    .domain(['total_complete_game', 'total_no_hitter', 'total_perfect_game', 'total_triple_plays'])
+    .range(['#40B55C', '#ECB55B', '#EB4F5C', '#40ADEE']);
+
+const scaleOpacity = d3.scaleLinear();
+
+const _dispatch = d3.dispatch('rect:enter', 'rect:leave');
 
 // defining Factory function
 function Matrix(_) {
@@ -18,7 +32,7 @@ function Matrix(_) {
     let _header = {title:'Histogram title', sub:'subtitle'};
     let _footer = {credit:'Credit', source:'data source'};
 
-    const _dispatch = d3.dispatch('rect:enter', 'rect:leave');
+    let _accessor = 'total_triple_plays'
 
     function exports(data) {
         // selecting root element ==> chart container, div where function is called in index.js
@@ -27,7 +41,6 @@ function Matrix(_) {
         // declaring setup/layout variables
         const width = root.clientWidth;
         const height = root.clientHeight;
-        const margin = {t:20, r:20, b:20, l:35};
         const w = width - (margin.r + margin.l);
         const h = height - (margin.t + margin.b);
 
@@ -56,14 +69,14 @@ function Matrix(_) {
             .append('svg')
             .classed('matrix', true);
         svgUpdate.exit().remove();
-        svgEnter.append('g').attr('class','plot')
+        svgEnter.append('g').classed('plot-matrix', true);
         svgUpdate = svgUpdate.merge(svgEnter)
             .attr('width', width)
             .attr('height', height);
 
         // Selecting group where svg elements are appendend
         const plot = svgUpdate.merge(svgEnter)
-            .select('.plot')
+            .select('.plot-matrix')
             .attr('transform',`translate(${margin.l},${margin.t})`);
 
         // Transform data
@@ -80,50 +93,22 @@ function Matrix(_) {
                 x1: +d.year + 1,
                 ...d
             }
-        });
+        })
+        .filter(d => d.total_triple_plays > 0);
 
         // Setting up scales
-        const scaleX = d3.scaleLinear().domain([d3.min(data,d => d.year),d3.max(data,d => d.year)]).range([0,w]);
-		const scaleY = d3.scaleBand().domain(teamList).rangeRound([0,h])
+        scaleX.domain([d3.min(data,d => d.year),d3.max(data,d => d.year)]).range([0,w]);
+		scaleY.domain(teamList).rangeRound([0,h])
             .paddingInner(0.05)
             .align(0.1);
-        const scaleColor = d3.scaleLinear()
-            .domain([d3.min(data,d => d.year),d3.max(data,d => d.year)])
-            .interpolate(d3.interpolateHcl)
-            .range([d3.rgb('#c40d0d'), d3.rgb('#eee8aa')]);
-
-        // Update
-        const binsUpdate = plot.selectAll('.bin')
-			.data(_data);
-
-		//Enter
-		const binsEnter = binsUpdate.enter()
-			.append('rect')
-			.attr('class','bin') //If you forget this, what will happen if we re-run this the activityHistogram function?
-			.attr('x', d => scaleX(d.x0))
-			.attr('width', d => (scaleX(d.x1) - scaleX(d.x0))-1)
-			.attr('y', d => h)
-			.attr('height', (h/teamList.length) -1)
-            .on('mouseenter', function(d) {_dispatch.call('rect:enter', this, d);})
-            .on('mouseleave', function(d) {_dispatch.call('rect:leave', this, d);});
-
-		//Enter + Update
-		binsEnter.merge(binsUpdate)
-			.transition()
-			.duration(500)
-			.attr('x', d => (scaleX(d.x0) - ((scaleX(d.x1) - scaleX(d.x0))-1)/2))
-			.attr('width', d => (scaleX(d.x1) - scaleX(d.x0))-1)
-			.attr('y', d => scaleY(d.team))
-            .style('fill-opacity', 0.6)
-			.style('fill', d => `rgba(216,235,193,${5*(d.total_complete_game/162)})`);
-
-        //Exit
-		binsUpdate.exit().remove();
+        const minFig = d3.min(data,d => d[_accessor]);
+        const maxFig = d3.max(data,d => d[_accessor]);
+        scaleOpacity.domain([minFig,maxFig]).range([0.1,0.9]);
 
         //Set up axis generator
 		const axisY = d3.axisLeft()
 			.scale(scaleY)
-			.tickSize(0)
+			.tickSize(-(w + margin.r))
 			// .ticks(5);
 
 		const axisX = d3.axisBottom()
@@ -157,6 +142,52 @@ function Matrix(_) {
             // .attr('transform',`translate(-${margin.r},0)`)
             .attr('transform',`translate(-7,0)`)
 			.call(axisY);
+
+        // Update
+        const binsUpdate = plot.selectAll('.bin')
+            .data(_data);
+
+        //Exit
+        binsUpdate.exit()
+            .transition()
+            .duration(800)
+            .attr('x', d => scaleX(d.x0))
+            .attr('y', d => -100)
+            .remove();
+
+		//Enter
+		const binsEnter = binsUpdate.enter()
+			.append('rect')
+			.attr('class','bin')
+            .attr('value', _accessor)
+			.attr('x', d => scaleX(d.x0))
+			.attr('y', d => h)
+            .attr('width', d => (scaleX(d.x1) - scaleX(d.x0))-1)
+			.attr('height', (h/teamList.length) -1)
+            .style('fill-opacity', d => scaleOpacity(d[_accessor]))
+			.style('fill', scaleColor(_accessor))
+            .on('mouseenter', function(d) {_dispatch.call('rect:enter', this, d, d3.select(this).attr('value'));})
+            .on('mouseleave', function(d) {_dispatch.call('rect:leave', this, d, _accessor);});
+
+		//Enter + Update
+		binsEnter.merge(binsUpdate)
+			.attr('x', d => (scaleX(d.x0) - ((scaleX(d.x1) - scaleX(d.x0))-1)/2))
+			.attr('y', d => scaleY(d.team))
+            .attr('value', _accessor)
+            .attr('width', d => (scaleX(d.x1) - scaleX(d.x0))-1)
+            .attr('height', (h/teamList.length) -1)
+            .transition()
+			.duration(500)
+            .style('fill-opacity', d => scaleOpacity(d.total_triple_plays))
+			.style('fill', scaleColor('total_triple_plays'));
+
+        //Exit
+		binsUpdate.exit()
+            .transition()
+            .duration(500)
+            .attr('x', d => scaleX(d.x0))
+            .attr('y', d => 0)
+            .remove();
 
         // appending footer (credit and source) to node
         let footerUpdate = d3.select(root)
@@ -210,13 +241,144 @@ function Matrix(_) {
 // exporting factory function as default
 export default Matrix;
 
+// setting up accessory factory function
+const drawRects = DrawRects();
+
+// receiving event dispatch and calling drawing function
+button.on('btn:clicked', function(data, value) {
+    drawRects.accessor(value);
+    drawRects(data);
+    d3.selectAll('.btn-rects').classed('active-button', false);
+    d3.select(this).classed('active-button', true);
+});
+
+
 // defining accessory factory functions
 // not exporting
 function DrawRects(_) {
 
     // create getter-setter variables in factory scope
+    let _accessor;
 
-    function exports() {
+    function exports(data) {
+
+    const root = d3.select('.plot-matrix');
+    const svg = d3.select('.matrix');
+
+    // declaring setup/layout variables
+    const width = svg.node().clientWidth;
+    const height = svg.node().clientHeight;
+    const w = width - (margin.r + margin.l);
+    const h = height - (margin.t + margin.b);
+
+    // Transform data
+    const teamList = d3.nest()
+        .key(d => d.team)
+        .entries(data)
+        .map(d => {
+            return d.key
+        });
+
+    const _data = data.map(d => {
+        return {
+            x0: +d.year,
+            x1: +d.year + 1,
+            ...d
+        }
+    }).filter(d => d[_accessor] > 0);
+
+    // Setting up scales
+    scaleX.domain([d3.min(data,d => d.year),d3.max(data,d => d.year)]).range([0,w]);
+	scaleY.domain(teamList).rangeRound([0,h])
+        .paddingInner(0.05)
+        .align(0.1);
+    const minFig = d3.min(data,d => d[_accessor]);
+    const maxFig = d3.max(data,d => d[_accessor]);
+    scaleOpacity.domain([minFig,maxFig]).range([0.1,0.9]);
+
+    //Set up axis generator
+    const axisY = d3.axisLeft()
+        .scale(scaleY)
+        .tickSize(-(w + margin.r))
+        // .ticks(5);
+
+    const axisX = d3.axisBottom()
+        .scale(scaleX)
+        .tickFormat(d => formatNumber(d))
+
+    //Axis
+    const axisXNode = root.selectAll('.axis-x')
+        .data([1]);
+
+    const axisXNodeEnter = axisXNode.enter()
+        .append('g')
+        .attr('class','axis axis-x');
+
+    axisXNode.merge(axisXNodeEnter)
+        // .attr('transform',`translate(0,${h})`)
+        .transition()
+        .call(axisX);
+
+    const axisYNode = root.selectAll('.axis-y')
+        .data([1]);
+
+    const axisYNodeEnter = axisYNode.enter()
+        .append('g')
+        .attr('class','axis axis-y');
+
+    axisYNode.merge(axisYNodeEnter)
+        // .attr('transform',`translate(-${margin.r},0)`)
+        .transition()
+        .call(axisY);
+
+    // Update
+    root.selectAll('.bin').remove();
+
+    const binsUpdate = root.selectAll('.bin')
+        .data(_data);
+
+    //Enter
+    const binsEnter = binsUpdate.enter()
+        .append('rect')
+        .classed('bin', true)
+        .attr('value', _accessor)
+        .attr('x', d => scaleX(d.x0))
+        .attr('y', d => h)
+        .attr('width', d => (scaleX(d.x1) - scaleX(d.x0))-1)
+        .attr('height', (h/teamList.length) -1)
+        .style('fill-opacity', d => scaleOpacity(d[_accessor]))
+        .style('fill', scaleColor(_accessor))
+        .on('mouseenter', function(d) {_dispatch.call('rect:enter', this, d, d3.select(this).attr('value'));})
+        .on('mouseleave', function(d) {_dispatch.call('rect:leave', this, d, _accessor);});
+
+    //Enter + Update
+    binsEnter.merge(binsUpdate)
+        .attr('width', d => (scaleX(d.x1) - scaleX(d.x0))-1)
+        .attr('height', (h/teamList.length) -1)
+        .attr('value', _accessor)
+        .transition()
+        .duration(3000)
+        .attr('x', d => (scaleX(d.x0) - ((scaleX(d.x1) - scaleX(d.x0))-1)/2))
+        .attr('y', d => scaleY(d.team))
+        .style('fill-opacity', d => scaleOpacity(d[_accessor]))
+        .style('fill', scaleColor(_accessor));
+
+    // //Exit
+    // binsUpdate.exit()
+    //     .transition()
+    //     .duration(800)
+    //     .attr('x', d => scaleX(d.x0))
+    //     .attr('y', () => -100)
+    //     .remove();
 
     }
+
+    // create getter-setter pattern for customization
+    exports.accessor = function(_) {
+		if (typeof _ === "undefined") return _accessor
+		_accessor = _;
+		return this
+	}
+
+    return exports
 }

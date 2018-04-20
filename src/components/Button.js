@@ -30,9 +30,9 @@ function Button(_) {
                     year: +d.key,
                     total_games: +d.values.length,
                     total_triple_plays: d3.sum(d.values, e => e.game_triple_plays),
-                    total_complete_game: d3.sum(d.values, e => e.game_complete_game),
                     total_no_hitter: d3.sum(d.values, e => e.game_no_hitter),
-                    total_perfect_game: d3.sum(d.values, e => e.game_perfect_game)
+                    total_perfect_game: d3.sum(d.values, e => e.game_perfect_game),
+                    total_complete_game: d3.sum(d.values, e => e.game_complete_game)
                 }
             });
 

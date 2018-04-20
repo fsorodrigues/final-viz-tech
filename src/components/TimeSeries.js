@@ -12,6 +12,7 @@ import '../style/timeseries.css';
 const button = Button()
     .buttonClass('btn-bars');
 
+// setting up scales
 const scaleX = d3.scaleLinear();
 const scaleY = d3.scaleLinear()
 const margin = {t:20, r:20, b:20, l:50};
@@ -22,6 +23,7 @@ function TimeSeries(_) {
     // create getter-setter variables in factory scope
     let _header = {title:'Histogram title', sub:'subtitle'};
     let _footer = {credit:'Credit', source:'data source'};
+    let _accessor = 'game_triple_plays'
 
     const _dispatch = d3.dispatch('bar:enter', 'bar:leave');
 
@@ -79,13 +81,13 @@ function TimeSeries(_) {
                     x0: +d.key,
                     x1: +d.key + 1,
                     total_games: +d.values.length,
-                    value: d3.sum(d.values, e => e.game_triple_plays),
-                    games: d.values.filter(f => f.game_triple_plays != 0).map(d => {
-                        return {
-                            team: "a",
-                            triple_plays: "b"
-                        };
-                    })
+                    value: d3.sum(d.values, e => e[_accessor])
+                    // games: d.values.filter(f => f[_accessor] != 0).map(d => {
+                    //     return {
+                    //         team: "a",
+                    //         triple_plays: "b"
+                    //     };
+                    // })
                 };
             });
 
@@ -101,16 +103,18 @@ function TimeSeries(_) {
 		//Enter
 		const binsEnter = binsUpdate.enter()
 			.append('rect')
-			.attr('class','bin') //If you forget this, what will happen if we re-run this the activityHistogram function?
+			.attr('class','bin')
+            .attr('value', _accessor)
 			.attr('x', d => scaleX(d.x0))
 			.attr('width', d => (scaleX(d.x1) - scaleX(d.x0))-1)
 			.attr('y', d => h)
 			.attr('height', 0)
-            .on('mouseenter', function(d) {_dispatch.call('bar:enter', this, d);})
+            .on('mouseenter', function(d) {_dispatch.call('bar:enter', this, d, d3.select(this).attr('value'));})
             .on('mouseleave', function(d) {_dispatch.call('bar:leave', this, d);});
 
 		//Enter + Update
 		binsEnter.merge(binsUpdate)
+            .attr('value', _accessor)
 			.transition()
 			.duration(500)
 			.attr('x', d => (scaleX(d.x0) - ((scaleX(d.x1) - scaleX(d.x0))-1)/2))
@@ -275,16 +279,18 @@ function DrawBars(_) {
     //Enter
     const binsEnter = binsUpdate.enter()
         .append('rect')
-        .attr('class','bin') //If you forget this, what will happen if we re-run this the activityHistogram function?
+        .attr('class','bin')
+        .attr('value', _accessor)
         .attr('x', d => scaleX(d.x0))
         .attr('width', d => (scaleX(d.x1) - scaleX(d.x0))-1)
         .attr('y', d => h)
         .attr('height', 0)
-        .on('mouseenter', function(d) {_dispatch.call('bar:enter', this, d);})
+        .on('mouseenter', function(d) {_dispatch.call('bar:enter', this, d, d3.select(this).attr('value'));})
         .on('mouseleave', function(d) {_dispatch.call('bar:leave', this, d);});
 
     //Enter + Update
     binsEnter.merge(binsUpdate)
+        .attr('value', _accessor)
         .transition()
         .duration(500)
         .attr('x', d => (scaleX(d.x0) - ((scaleX(d.x1) - scaleX(d.x0))-1)/2))

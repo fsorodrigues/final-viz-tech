@@ -39,7 +39,8 @@ export const parseMatrix = d => {
         total_triple_plays: (+d.away_triple_plays) + (+d.home_triple_plays),
         total_complete_game: (+d.away_complete_game) + (+d.home_complete_game),
         total_no_hitter: (+d.away_no_hitter) + (+d.home_no_hitter),
-        total_perfect_game: (+d.away_perfect_game) + (+d.home_perfect_game)
+        total_perfect_game: (+d.away_perfect_game) + (+d.home_perfect_game),
+        total_games: (+d.away_games) + (+d.home_games)
     };
 };
 

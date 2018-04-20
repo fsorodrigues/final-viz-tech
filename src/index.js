@@ -67,7 +67,7 @@ const controller = Controller()
 // TO DO: importing data using the Promise interface
 Promise.all([
     fetchCsv('./data/gamelog_1970_2017.csv', parseHist),
-    fetchCsv('./data/matrix_year_team.csv', parseMatrix),
+    fetchCsv('./data/matrix_year_team.csv', parseMatrix)
 ]).then(([game_logs, data_matrix]) => {
 
     d3.select('.line-container')
@@ -86,68 +86,96 @@ Promise.all([
 
 });
 
-timeSeries.on('bar:enter', function(d) {
+timeSeries.on('bar:enter', function(d,_accessor) {
     d3.select(this)
         .style('fill-opacity', 1)
         .style('stroke-width', 1)
         .style('stroke', 'black');
+
+    const tooltip = d3.select('.tooltip-bars');
+    tooltip.style('top', `${d3.event.pageY-10}px`)
+        .style('left', `${d3.event.pageX+10}px`)
+        .transition()
+        .duration(250)
+        .style('opacity', 1);
+
+    tooltip.html(`<b>${d.x0}</b><br>${d.value} ${_accessor}`);
 }).on('bar:leave', function(d) {
     d3.select(this)
         .style('fill-opacity', 0.6)
         .style('stroke-width', 0)
         .style('stroke', 'none');
+
+    const tooltip = d3.select('.tooltip-bars');
+    tooltip.style('top', 0)
+        .style('left', 0)
+        .transition()
+        .duration(150)
+        .style('opacity', 0);
+
+    tooltip.html('');
 });
 
-matrix.on('rect:enter', function(d) {
+matrix.on('rect:enter', function(d,_accessor) {
     d3.select(this)
-        .style('fill-opacity', 1)
         .style('stroke-width', 1)
         .style('stroke', 'black');
+
+    const tooltip = d3.select('.tooltip-matrix');
+    tooltip.style('top', `${d3.event.pageY-10}px`)
+        .style('left', `${d3.event.pageX+10}px`)
+        .transition()
+        .duration(250)
+        .style('opacity', 1);
+
+    tooltip.html(`<b>${d.team}</b> | ${d.year}<br> ${_accessor}: ${d[_accessor]}`);
 }).on('rect:leave', function(d) {
     d3.select(this)
-        .style('fill-opacity', 0.6)
         .style('stroke-width', 0)
         .style('stroke', 'none');
+
+    const tooltip = d3.select('.tooltip-matrix');
+    tooltip.style('top', 0)
+        .style('left', 0)
+        .transition()
+        .duration(150)
+        .style('opacity', 0);
+
+    tooltip.html('');
 });
 
-
-
-
-
-
-
-const _svg = document.querySelector('.hero-svg');
-
-const width = _svg.clientWidth;
-const height = _svg.clientHeight;
-const size = 15;
-
-const svg = d3.select('.hero-svg')
-
-svg.append('rect')
-    .attr('x', -1)
-    .attr('y', -1)
-    .attr('height', size)
-    .attr('width', size)
-    .attr('fill', 'white')
-
-svg.append('rect')
-    .attr('x', width - size)
-    .attr('y', -1)
-    .attr('height', size)
-    .attr('width', size)
-    .attr('fill', 'white')
-
-svg.append('rect')
-    .attr('x', width - size)
-    .attr('y', height - size)
-    .attr('height', size)
-    .attr('width', size)
-    .attr('fill', 'white')
-
-svg.append('rect')
-    .attr('x', -1)
-    .attr('y', height - size)
-    .attr('height', size + 10)
-    .attr('width', size)
-    .attr('fill', 'white')
+// const _svg = document.querySelector('.hero-svg');
+//
+// const width = _svg.clientWidth;
+// const height = _svg.clientHeight;
+// const size = 15;
+//
+// const svg = d3.select('.hero-svg')
+//
+// svg.append('rect')
+//     .attr('x', -1)
+//     .attr('y', -1)
+//     .attr('height', size)
+//     .attr('width', size)
+//     .attr('fill', 'white')
+//
+// svg.append('rect')
+//     .attr('x', width - size)
+//     .attr('y', -1)
+//     .attr('height', size)
+//     .attr('width', size)
+//     .attr('fill', 'white')
+//
+// svg.append('rect')
+//     .attr('x', width - size)
+//     .attr('y', height - size)
+//     .attr('height', size)
+//     .attr('width', size)
+//     .attr('fill', 'white')
+//
+// svg.append('rect')
+//     .attr('x', -1)
+//     .attr('y', height - size)
+//     .attr('height', size + 10)
+//     .attr('width', size)
+//     .attr('fill', 'white')

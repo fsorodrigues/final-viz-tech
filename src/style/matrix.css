@@ -1,0 +1,54 @@
+/* ELEMENT POSITION, MARGIN, PADDING */
+.scrolly.desktop {
+	margin: 0 0 3rem 0;
+}
+
+/* AXIS */
+.axis-y .tick:first-of-type line {
+	opacity: .5;
+	stroke:rgba(100,100,100,1);
+	stroke-dasharray: 1px 2px;
+	pointer-events: none;
+}
+
+.axis-y .tick:not(:first-of-type) line {
+	opacity: .5;
+    stroke:rgba(100,100,100,1);
+	stroke-dasharray: 1px 2px;
+	pointer-events: none;
+}
+
+.domain {
+    display: none;
+}
+
+/* HEADER (TITLE AND SUBTITLE) */
+div.chart-header {
+    margin: 3rem 0 0 0;
+}
+
+h2.chart-title {
+    margin: 0 0 0.5rem 0;
+}
+
+/* HEADER (TITLE AND SUBTITLE) */
+div.chart-footer {
+    margin: 1rem 0 0 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+h6.chart-credit {
+	font-size: .5rem;
+	text-transform: uppercase;
+	font-weight: lighter;
+    margin: 0 0 0.5rem 0;
+}
+
+h6.chart-source {
+	font-size: .5rem;
+	text-transform: uppercase;
+	font-weight: lighter;
+    margin: 0 0 0.5rem 0;
+}
