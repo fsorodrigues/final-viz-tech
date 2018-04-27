@@ -21,10 +21,11 @@
 			<!-- HERO OPENING -->
 			<!-- TITLE, IMAGE  -->
 			<div class="row open-container">
-				<div class="col-md-4 offset-md-3 hero-container">
+				<div class="col-md-6 offset-md-2 hero-container">
 					<div class='scene' id='scene-1' value='total_triple_plays'></div>
-					<h1 class='hero-text'>how rare are the rarest things in baseball?</h1>
-					<!-- <svg class ='hero-svg' width="150px" heigth="150px" transform="rotate(45)"> -->
+					<h1 class='hero-text'>gems from the diamond</h1>
+					<h2 class='hero-text'>how rare things really are in baseball?</h2>
+					<h5 class='hero-text'>by felippe rodrigues</h5>
 					</svg>
 				</div>
 			</div>
@@ -33,9 +34,17 @@
 			<!-- BYLINE, OPENING, SECTION 1 -->
 			<div class="row main-container">
 				<div class="col-md-6 offset-md-3 text-container">
-					<p>Everybody knows you don't see a perfect game every day. We don't see them every year and, well, the 70s' baseball maniacs like us didn't see one. Yeah, a perfect game is pretty rare by every standard, less than 0.1% of a season worth games.</p>
-					<p>What about the next best thing, a no-hitter? Also not that common. Triple-plays? About as unusual, which a bit of a surprise, right? And then there are the cycle (and the natural one), grand slams, walk-off balks, complete games — species in risk of extinction — and a whole bunch of other quirky baseball feats that are what make us love the game.</p>
-					<p>But how rare those things really are???</p>
+					<p>Everybody knows you don't see a perfect game every day. There's been only 21 in history and 14 since the 1968 season. Hell, we don't see them every five years. The unlucky baseball maniacs of the 70s went the whole decade before seeing Cleveland's Len Barker pitch one in 1981 against Toronto.</p>
+					<p>But what about the next best things in baseball such as no-hitters, triple-plays, cycles? How rare are they? And what's happenning to complete games?</p>
+					<p>I gathered data from 105,418 games played between 1970 and 2017 to understand how these quirky baseball feats stack up against each other</p>
+				</div>
+			</div>
+			<div class="row main-container">
+				<div class="col-md-6 offset-md-3 text-container">
+					<h3>What's with the 70s?</h3>
+					<p>We already established it was one unfortunate decade from the top of the mound. 1974 was one unlucky year in the infield, with no team turning a triple play during the season. A stark low figure compared to 5 years later, the 79 season, when baseball accomplished an all-time record 11 triple plays.</p>
+ 	  				<p>Make no mistake, though, baseball rarests feats do not seem to obey a historical trend. It seeems triple plays, no-hitters, perfect-games are more a product of Angels in the Infield or a Feverish Pitcher than anything else.</p>
+					<p>Complete games, on the other hand, are a Major League species in risk of extinction. But before we get into that, let us dive into the data.</p>
 				</div>
 			</div>
 
@@ -43,34 +52,37 @@
 			<section id="line-chart-container">
 				<div class="row main-container">
 					<div class='spacer-15'></div>
-					<div class="col-md-7 offset-md-1 line-container">
-					</div>
+					<div class="col-md-6 offset-md-1 line-container"></div>
 					<div class='spacer-15'></div>
-					<div class='scene' id='scene-2' value='total_complete_game'>
-						<div class='scene-text-wrapper col-md-2 offset-md-9'>
+					<div class='scene' id='scene-2' value='total_no_hitter'>
+						<div class='scene-text-wrapper col-md-3 offset-md-8'>
 							<!-- triple plays -->
-							<p class='scene-text'>Triple plays are somewhat of a surprise. I'd think they would happen more often then in reality. The fact is they are just slightly less rare than a no-hitter, happening about 4-5 times a season. But what about the 1974 season, when no triple plays were turned?</p>
+							<p class='scene-text'>Triple plays were somewhat of a personal surprise when I crunched the numbers.</p>
+							<p class='scene-text'>I'd think they would happen more often then in reality. The fact is they are not that much common than a no-hitter, happening about 4 times a season.</p>
 						</div>
 					</div>
 					<div class='spacer-100'></div>
-					<div class='scene' id='scene-3' value='total_no_hitter'>
-						<div class='scene-text-wrapper col-md-2 offset-md-9'>
-							<!-- complete games -->
-							<p class='scene-text'>scene-2 explainer. Complete games info.</p>
+					<div class='scene' id='scene-3' value='total_perfect_game'>
+						<div class='scene-text-wrapper col-md-3 offset-md-8'>
+							<!-- no-hitters -->
+							<p class='scene-text'>No-hitters happen only twice a season on average. The shape of this line is specially good to visualize the absence of any particular trend up or down.</p>
+							<p class='scene-text'>There have been seven seasons in the ast 48 to go without a no-hitter, including 1998 and 2004.</p>
 						</div>
 					</div>
 					<div class='spacer-100'></div>
-					<div class='scene' id='scene-4' value='total_perfect_game'>
-						<div class='scene-text-wrapper col-md-2 offset-md-9'>
-							<!-- no hitter -->
-							<p class='scene-text'>scene-3 explainer. No hitter info.</p>
-						</div>
-					</div>
-					<div class='spacer-100'></div>
-					<div class='scene' id='scene-5' value='total_perfect_game'>
-						<div class='scene-text-wrapper col-md-2 offset-md-9'>
+					<div class='scene' id='scene-4' value='total_complete_game'>
+						<div class='scene-text-wrapper col-md-3 offset-md-8'>
 							<!-- perfect games -->
-							<p class='scene-text'>scene-4 explainer. Perfect games info.</p>
+							<p class='scene-text'>Those two years have seen a flawless pitching performance. Perfect-games are, technically, also no-hitters (but not vice-versa), and I'm counting those two things separately.</p> <p class='scene-text'>They  are baseball's rarest gems, occurring roughly every 7,529 games — or three full seasons plus a full April worth of games.</p>
+							<p class='scene-text'>These figures were recently boosted. 2010 and 2012 are the only MLB seasons in history with multiple perfect games, 2 and 3, respectively. Before that, perfect games came at rate of about 9,441 games, almost one every four seasons.</p>
+						</div>
+					</div>
+					<div class='spacer-100'></div>
+					<div class='scene' id='scene-5' value='total_complete_game'>
+						<div class='scene-text-wrapper col-md-3 offset-md-8'>
+							<!-- complete games -->
+							<p class='scene-text'>Now, when it comes to complete games, the story is very different. Watching a single man pitch the full nine innings rapidly going down.</p>
+							<p class='scene-text'>I'm talking about over a thousand complete games 40 years ago dropping to no more than 60 last season. That's sabermetrics at work.</p>
 						</div>
 					</div>
 					<div class='spacer-100'></div>
@@ -81,8 +93,9 @@
 			<!-- SECTION 2 -->
 			<div class="row main-container">
 				<div class="col-md-6 offset-md-3 text-container">
-					<p>Some more text.</p>
-					<p>Mussum Ipsum, cacilds vidis litro abertis. Tá deprimidis, eu conheço uma cachacis que pode alegrar sua vidis. Viva Forevis aptent taciti sociosqu ad litora torquent. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis. Mauris nec dolor in eros commodo tempor. Aenean aliquam molestie leo, vitae iaculis nisl.</p>
+					<h3>The wonder years</h3>
+					<p>Another hard indication that baseball's rarest feats are closer to a lucky day than anything else is the 1981 season, when a strike cancelled almost 40% of regular season games. Nonetheless, Major League had 5 triple plays, 2 no-hitters, and 1 perfect game that year, combining the most feats in the least games. Albeit short, it was one hell of a season.</p>
+					<p>1990 was also, but for different reasons. With Randy Johnson and Nolan Ryan headlining a great year for no-hitting action: 8 in total, a single-season record. The first half of the 2010s was also a prolific in that realm, as both Tim Lincecum and Jake Arrita pitched no-hitters in back-to-back seasons.</p>
 				</div>
 			</div>
 
@@ -96,8 +109,11 @@
 			<!-- TEXT -->
 			<div class="row main-container">
 				<div class="col-md-6 offset-md-3 text-container">
-					<p>Some more text.</p>
-					<p>Mussum Ipsum, cacilds vidis litro abertis. Tá deprimidis, eu conheço uma cachacis que pode alegrar sua vidis. Viva Forevis aptent taciti sociosqu ad litora torquent. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis. Mauris nec dolor in eros commodo tempor. Aenean aliquam molestie leo, vitae iaculis nisl.</p>
+					<h3>Are some clubs specially good at something?</h3>
+					<p>Yes and no, depending on the year. Again, this stuff is so rare in baseball that it is hard to identify trends. No team has more than 3 triple plays in a season or 2 no-hitters in a single season.</p>
+					<p>The Yankees' 1998 and 99 rotations, however, pitched perfect games in back-to-back years — no wonder we all hate them — a testiment to the quality of a dinasty team that won 4 World Series in 5 years.</p>
+					<p>In 1990, the Minnesota Twins had two total triple plays, both executed in the same game against the Boston Red Sox, the one and only time that happened in Major League history.</p>
+					<p>But the most impressive coincidence came to us in 2012, when Safeco Field in Seattle, Wa. witnessed two perfect games in a same season. Philip Humber did it first when the White Sox visited, but to the Mariners redemption, Félix Hernández also pitched a gem in the park.</p>
 				</div>
 			</div>
 
